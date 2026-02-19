@@ -211,6 +211,37 @@
     </div>
 
     <script>
+        (function() {
+    // 1. 强制页面全屏，禁用滚动
+    document.documentElement.style.width = '100vw';
+    document.documentElement.style.height = '100vh';
+    document.documentElement.style.overflow = 'hidden';
+    document.body.style.width = '100%';
+    document.body.style.height = '100%';
+    document.body.style.overflow = 'hidden';
+    document.body.style.margin = '0';
+    document.body.style.padding = '0';
+
+    // 2. 自动缩放页面，适配电视屏幕
+    function fitTvScreen() {
+        const tvWidth = window.screen.width;
+        const tvHeight = window.screen.height;
+        const pageRatio = document.body.scrollWidth / document.body.scrollHeight;
+        const tvRatio = tvWidth / tvHeight;
+
+        // 按比例缩放，避免变形
+        if (pageRatio > tvRatio) {
+            document.body.style.transform = `scale(${tvWidth / document.body.scrollWidth})`;
+        } else {
+            document.body.style.transform = `scale(${tvHeight / document.body.scrollHeight})`;
+        }
+        document.body.style.transformOrigin = '0 0'; // 从左上角开始缩放
+    }
+
+    // 3. 页面加载完成后执行适配，屏幕变化时重新适配
+    window.onload = fitTvScreen;
+    window.onresize = fitTvScreen;
+})();
         // ===================== 核心配置 =====================
         // 1. 远程接口地址（你需要替换为实际的接口地址）
         const API_CONFIG = {
