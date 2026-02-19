@@ -1,11 +1,401 @@
 <!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>PakePlus</title>
-    </head>
-    <body>
-        PakePlus
-    </body>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>酒店房价牌 - 前台电视全屏展示</title>
+    <!-- 引入Tailwind CSS -->
+    <script src="3.4.17.js"></script>
+    <!-- 引入Font Awesome图标 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- 自定义配置 -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#165DFF',
+                        secondary: '#FF7D00',
+                        dark: '#1D2129',
+                        tv-bg: '#0F172A' // 深色背景更适合电视全屏展示
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    
+    <style type="text/tailwindcss">
+        @layer utilities {
+            /* 滚动公告动画 */
+            .animate-marquee {
+                animation: marquee 30s linear infinite;
+            }
+            @keyframes marquee {
+                0% { transform: translateX(100%); }
+                100% { transform: translateX(-97%); }
+            }
+            .marquee-container:hover .animate-marquee {
+                animation-play-state: paused;
+            }
+            
+            /* 全屏图片轮播动画 - 缩放+平移效果 */
+            .carousel-item {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                opacity: 0;
+                transition: all 1.5s ease-in-out;
+            }
+            .carousel-item.active {
+                opacity: 1;
+                animation: zoomEffect 8s ease-in-out infinite;
+            }
+            @keyframes zoomEffect {
+                0% { transform: scale(1) translateZ(0); }
+                50% { transform: scale(1.1) translateZ(0); }
+                100% { transform: scale(1) translateZ(0); }
+            }
+            
+            /* 全屏适配 */
+            .full-screen {
+                height: 100vh;
+                overflow: hidden;
+            }
+            /* 移除全局蒙版，仅保留卡片背景 */
+            .content-overlay {
+                background: transparent;
+            }
+            /* 固定时间天气卡片高度 */
+            .time-weather-card {
+                height: 200px; /* 固定高度，可根据需求调整 */
+                display: flex;
+                flex-direction: column;
+            }
+            /* 房价表固定高度 + 内部卡片均分高度 */
+            .fixed-price-card {
+                height: calc(100vh - 240px); /* 房价表总固定高度，可自定义 */
+                display: flex;
+                flex-direction: column;
+            }
+            .price-item-wrapper {
+                flex: 1; /* 每个房型卡片均分高度 */
+                display: flex;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<!-- 全屏展示，深色背景 -->
+<body class="bg-tv-bg text-white font-sans full-screen">
+    <!-- 全屏图片轮播背景 - 无蒙版直接展示 -->
+    <div class="fixed inset-0 z-0">
+        <div class="carousel-item active">
+            <img src="img/1.jpg" alt="" class="w-full h-full object-cover">
+        </div>
+        <div class="carousel-item active">
+            <img src="img/2.jpg" alt="" class="w-full h-full object-cover">
+        </div>
+        <div class="carousel-item active">
+            <img src="img/3.jpg" alt="" class="w-full h-full object-cover">
+        </div>
+        <div class="carousel-item active">
+            <img src="img/4.jpg" alt="" class="w-full h-full object-cover">
+        </div>
+        <div class="carousel-item active">
+            <img src="img/5.jpg" alt="" class="w-full h-full object-cover">
+        </div>
+        <div class="carousel-item active">
+            <img src="img/6.jpg" alt="" class="w-full h-full object-cover">
+        </div>
+        <div class="carousel-item active">
+            <img src="img/7.jpg" alt="" class="w-full h-full object-cover">
+        </div>
+    </div>
+
+    <!-- 内容层 - 无全局蒙版，仅靠卡片背景保证可读性 -->
+    <div class="fixed inset-0 z-10 content-overlay">
+        <!-- 整体布局容器 - 适配电视16:9比例，统一内边距 -->
+        <div class="w-full h-full px-8 pt-8 pb-8 grid grid-cols-3 grid-rows-auto gap-6">
+            <!-- 第一行：房价（左） + 公告（右） - 顶部对齐 -->
+            <div class="col-span-2 row-auto">
+                <!-- 房价表 - 高度自适应，仅限制最大高度不超出屏幕 -->
+                <div class="bg-blue-900/40 backdrop-blur-md rounded-xl p-8 w-[80%] fixed-price-card">
+                    <h1 class="text-3xl font-bold mb-8 border-b border-white/30 pb-4 text-center" style="font-size: 66px;height:100px;line-height: 100px;">
+                        华美达安可酒店式公寓
+                    </h1>
+                    <h2 class="text-3xl font-bold mb-8 border-b border-white/30 pb-4 text-center">
+                        今日房价 <span class="text-primary text-xl font-normal">(价格实时更新)</span>
+                    </h2>
+                    
+                    <div id="price-list" class="space-y-6">
+                        <!-- 房价内容会通过JS动态生成 -->
+                    </div>
+                    
+                    <div class="mt-8 pt-6 border-t border-white/30 text-center">
+                        <p class="text-gray-200 text-xl">
+                            <i class="fa-solid fa-info-circle mr-2 text-primary"></i>
+                            价格不含税费，预订请提前1天确认，节假日价格可能上浮 | 预订热线：15268618128
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 公告 - 与房价顶部对齐，高度适配一行文字 -->
+            <div class="col-span-1 row-auto flex items-start" style="margin-left: -40%;">
+                <div class="bg-blue-900/40 backdrop-blur-md rounded-xl p-4 w-full overflow-hidden marquee-container mt-0">
+                    <div class="flex items-center gap-3 h-12">
+                        <i class="fa-solid fa-bullhorn text-primary text-2xl flex-shrink-0"></i>
+                        <div id="announcement-content" class="animate-marquee whitespace-nowrap text-white font-semibold text-xl">
+                            欢迎光临本酒店！入住可享免费早餐，住满3晚立减100元，会员专享8折优惠，停车场24小时免费开放。
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 第二行：时间+天气 - 固定高度，与房价间距固定为6（gap-6） -->
+            <div class="col-span-2 row-auto flex gap-6">
+                <!-- 日期时间卡片 - 固定高度 -->
+                <div class="bg-blue-900/40 backdrop-blur-md rounded-xl p-6 w-1/4 time-weather-card">
+                    <div class="flex flex-col items-center justify-center h-full gap-3">
+                        <i class="fa-solid fa-calendar-days text-primary text-3xl"></i>
+                        <div class="text-center">
+                            <div id="current-date" class="font-semibold text-2xl leading-tight">2026年2月19日<br>周四</div>
+                            <div id="current-time" class="text-gray-200 text-2xl mt-2">14:30:00</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 3天天气预报卡片 - 固定高度 -->
+                <div class="bg-blue-900/40 backdrop-blur-md rounded-xl p-6 w-[54%] time-weather-card">
+                    <div class="flex flex-col justify-center h-full gap-3">
+                        <div class="flex items-center gap-4">
+                            <i class="fa-solid fa-cloud-sun text-secondary text-3xl"></i>
+                            <div>
+                                <div class="font-semibold text-2xl">未来3天天气预报</div>
+                            </div>
+                        </div>
+                        <!-- 3天天气列表 -->
+                        <div class="grid grid-cols-3 gap-4 mt-2">
+                            <!-- 今日 -->
+                            <div class="text-center">
+                                <div class="text-lg font-medium">今日</div>
+                                <i class="fa-solid fa-sun text-yellow-400 text-2xl my-1"></i>
+                                <div class="text-gray-200">晴 22°C</div>
+                            </div>
+                            <!-- 明日 -->
+                            <div class="text-center">
+                                <div class="text-lg font-medium">明日</div>
+                                <i class="fa-solid fa-cloud text-gray-200 text-2xl my-1"></i>
+                                <div class="text-gray-200">多云 20°C</div>
+                            </div>
+                            <!-- 后天 -->
+                            <div class="text-center">
+                                <div class="text-lg font-medium">后天</div>
+                                <i class="fa-solid fa-cloud-rain text-blue-300 text-2xl my-1"></i>
+                                <div class="text-gray-200">小雨 18°C</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 右侧留白区域 -->
+            <div class="col-span-1 row-auto"></div>
+        </div>
+    </div>
+
+    <script>
+        // ===================== 核心配置 =====================
+        // 1. 远程接口地址（你需要替换为实际的接口地址）
+        const API_CONFIG = {
+            priceApi: 'https://www.zykj0579.com/api/hotelPrice/qtData.php?a=price', // 房价接口
+            announcementApi: 'https://www.zykj0579.com/api/hotelPrice/qtData.php?a=gg', // 公告接口
+            timeout: 5000, // 请求超时时间（5秒）
+            refreshInterval: 30 * 60 * 1000 // 数据刷新间隔（30分钟）
+        };
+
+        // 2. 本地兜底数据（无网络时使用）
+        const LOCAL_DATA = {
+            // 本地房价数据
+            prices: [
+                {
+                    name: '舒适大床房',
+                    desc: '20-25㎡ | 1张1.5米大床 | 不含双早',
+                    price: 138,
+                    originalPrice: 168
+                },
+                {
+                    name: '巨幕影音双床房',
+                    desc: '25-30㎡ | 2张1.2米床 | 不含双早',
+                    price: 148,
+                    originalPrice: 178
+                },
+                {
+                    name: '巨幕影音大床房',
+                    desc: '25-30㎡ | 1张1.8米大床 | 不含双早',
+                    price: 148,
+                    originalPrice: 178
+                },
+                {
+                    name: '钟点房',
+                    desc: '20-30㎡ | 4小时 ',
+                    price: 68,
+                    originalPrice: 88
+                }
+            ],
+            // 本地公告数据
+            announcement: '欢迎光临本酒店！停车场24小时免费开放。订房热线15268618128（微信同号）'
+        };
+
+        // ===================== 工具函数 =====================
+        // 通用请求函数（带超时和错误处理）
+        async function fetchData(url, timeout = 5000) {
+            try {
+                // 创建超时控制器
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), timeout);
+                
+                // 发起请求
+                const response = await fetch(url, {
+                    method: 'GET',
+                    signal: controller.signal,
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                clearTimeout(timeoutId);
+                
+                // 检查响应状态
+                if (!response.ok) {
+                    throw new Error(`HTTP错误，状态码：${response.status}`);
+                }
+                
+                return await response.json();
+            } catch (error) {
+                console.warn('远程数据获取失败，将使用本地数据：', error.message);
+                return null; // 返回null表示获取失败
+            }
+        }
+
+        // 渲染房价列表
+        function renderPriceList(priceData) {
+            const priceListEl = document.getElementById('price-list');
+            if (!priceListEl) return;
+
+            // 清空原有内容
+            priceListEl.innerHTML = '';
+
+            // 生成房价卡片
+            priceData.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'price-item-wrapper p-5 border border-white/30 rounded-lg hover:border-primary hover:bg-primary/20 transition-all';
+                card.innerHTML = `
+                <div class="w-full flex justify-between items-center">
+                    <div>
+                        <h3 class="font-semibold text-3xl">${item.name}</h3>
+                        <p class="text-gray-200 text-2g mt-1">${item.desc}</p>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-secondary text-4xl font-bold">¥${item.price}</span>
+                        <span class="text-gray-300 line-through text-2xl ml-2">¥${item.originalPrice}</span>
+                    </div></div>
+                `;
+                priceListEl.appendChild(card);
+                
+                // 添加交互效果
+                card.addEventListener('mouseenter', () => {
+                    card.classList.add('scale-[1.02]', 'shadow-lg');
+                });
+                card.addEventListener('mouseleave', () => {
+                    card.classList.remove('scale-[1.02]', 'shadow-lg');
+                });
+            });
+        }
+
+        // 更新公告内容
+        function updateAnnouncement(content) {
+            const announcementEl = document.getElementById('announcement-content');
+            if (announcementEl) {
+                announcementEl.textContent = content;
+            }
+        }
+
+        // ===================== 主逻辑 =====================
+        // 加载数据（远程优先，本地兜底）
+        async function loadHotelData() {
+            // 1. 加载房价数据
+            const remotePriceData = await fetchData(API_CONFIG.priceApi, API_CONFIG.timeout);
+            const priceData = remotePriceData?.data || LOCAL_DATA.prices;
+            renderPriceList(priceData);
+
+            // 2. 加载公告数据
+            const remoteAnnouncementData = await fetchData(API_CONFIG.announcementApi, API_CONFIG.timeout);
+            const announcement = remoteAnnouncementData?.content || LOCAL_DATA.announcement;
+            updateAnnouncement(announcement);
+        }
+
+        // ===================== 基础功能 =====================
+        // 1. 更新实时日期和时间
+        function updateDateTime() {
+            const now = new Date();
+            
+            // 格式化日期（多行展示）
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            const weekDays = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
+            const weekDay = weekDays[now.getDay()];
+            document.getElementById('current-date').textContent = `${year}年${month}月${day}日\n${weekDay}`;
+            
+            // 格式化时间（放大字体）
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            document.getElementById('current-time').textContent = `${hours}:${minutes}:${seconds}`;
+        }
+        
+        // 2. 全屏图片轮播 + 缩放动画
+        function initCarousel() {
+            const items = document.querySelectorAll('.carousel-item');
+            let currentIndex = 0;
+            
+            // 切换轮播项
+            function changeSlide() {
+                items[currentIndex].classList.remove('active');
+                currentIndex = (currentIndex + 1) % items.length;
+                items[currentIndex].classList.add('active');
+            }
+            
+            // 每8秒切换一次
+            setInterval(changeSlide, 8000);
+        }
+
+        // ===================== 初始化 =====================
+        // 初始化所有功能
+        function initApp() {
+            // 初始化时间
+            updateDateTime();
+            setInterval(updateDateTime, 1000);
+            
+            // 初始化轮播
+            initCarousel();
+            
+            // 加载房价和公告数据
+            loadHotelData();
+            
+            // 设置定时刷新（每30分钟更新一次数据）
+            setInterval(loadHotelData, API_CONFIG.refreshInterval);
+        }
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', initApp);
+    </script>
+</body>
 </html>
