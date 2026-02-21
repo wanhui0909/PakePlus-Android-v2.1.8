@@ -883,10 +883,6 @@ function updateTime() {
         }
         // 开始公告滚动
         startAnnouncementScroll();
-        setInterval(function(){
-            // 从接口获取数据
-            fetchHotelData();
-        },180000)
     }
     
     // 幻灯片相关变量
@@ -980,6 +976,7 @@ function updateTime() {
     // 初始化时间显示
     updateTime();
     setInterval(updateTime, 1000);
+    setInterval(fetchHotelData,180000)
     
     // 开始幻灯片轮播
     showSlide(0);
