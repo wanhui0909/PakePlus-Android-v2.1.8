@@ -380,11 +380,11 @@
         }
         
         .room-price {
-            font-size: 2.5rem; /* 36px */
+            font-size: 4rem; /* 36px */
         }
         
         .room-name {
-            font-size: 3rem; /* 28px */
+            font-size: 4rem; /* 28px */
         }
         
         .announcement-wrapper {
@@ -408,15 +408,15 @@
     /* 针对低分辨率电视的额外优化 */
     @media screen and (max-height: 800px) {
         .room-price {
-            font-size: 3.5rem; /* 32px - 在高度较小的屏幕上进一步减小 */
+            font-size: 4rem; /* 32px - 在高度较小的屏幕上进一步减小 */
         }
         
         .room-name {
-            font-size: 3rem; /* 24px */
+            font-size: 4rem; /* 24px */
         }
         
         .price-title {
-            font-size: 2.5rem; /* 30px */
+            font-size: 3.5rem; /* 30px */
             margin-bottom: 1.25rem; /* 20px */
         }
     }
@@ -425,15 +425,15 @@
     @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
         /* 在高DPI设备上微调字体大小 */
         .room-price {
-            font-size: 2.375rem; /* 38px */
+            font-size: 4rem; /* 38px */
         }
         
         .room-name {
-            font-size: 1.75rem; /* 28px */
+            font-size: 4rem; /* 28px */
         }
         
         .room-desc {
-            font-size: 1.25rem; /* 20px */
+            font-size: 2.5rem; /* 20px */
         }
     }
 </style>
@@ -871,7 +871,7 @@ function updateTime() {
                     '<div class="room-name">' + room.name + '</div>' +
                     '<div class="room-oldPrice">¥' + room.market+ ' </div>' +
                     '<div class="room-desc">' + room.desc + '</div>' +
-                    '<div class="room-price">¥' + room.price + ' / 晚</div>';
+                    '<div class="room-price">¥' + room.price + '</div>';
                 
                 roomsContainer.appendChild(roomElement);
             }
