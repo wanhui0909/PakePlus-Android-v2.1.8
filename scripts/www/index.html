@@ -14,14 +14,45 @@
 
 <meta name="x5-orientation" content="landscape">
 
-<!-- <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"> -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 
 <title>酒店房价牌 - 电视专用版（现代设计）</title>
 <style type="text/css">
+    /* 重置样式和根字体大小 */
     * {
         margin: 0;
         padding: 0;
         box-sizing: border-box;
+    }
+    
+    /* 根元素字体大小基于视口宽度动态调整 - 关键修改 */
+    html {
+        font-size: calc(100vw / 1920 * 16); /* 基于1920px设计稿，1rem = 16px */
+    }
+    
+    /* 针对不同屏幕尺寸的字体大小调整 */
+    @media screen and (max-width: 1920px) {
+        html {
+            font-size: calc(100vw / 1920 * 14); /* 较小屏幕减小基准 */
+        }
+    }
+    
+    @media screen and (max-width: 1366px) {
+        html {
+            font-size: calc(100vw / 1366 * 12); /* 小屏幕进一步减小 */
+        }
+    }
+    
+    @media screen and (max-width: 1024px) {
+        html {
+            font-size: calc(100vw / 1024 * 10); /* 平板尺寸调整 */
+        }
+    }
+    
+    @media screen and (max-width: 768px) {
+        html {
+            font-size: calc(100vw / 768 * 9); /* 手机尺寸调整 */
+        }
     }
     
     body {
@@ -34,101 +65,125 @@
         position: fixed;
         top: 0;
         left: 0;
-        font-size: 24px;
+        font-size: 1rem; /* 使用rem单位，不再是固定px */
     }
     
     .main-container {
         width: 100%;
         height: 100%;
         position: relative;
-        background: rgba(15, 23, 42, 0.8);
+        background: #F5F1E6;
     }
     
+    /* 头部区域 - 使用rem单位 */
     .header {
         background: #0f172a;
         color: #ffffff;
-        padding: 20px 40px;
+        padding: 1.25rem 2.5rem; /* 20px/16 = 1.25rem, 40px/16 = 2.5rem */
         height: 12%;
         position: absolute;
         top: 0;
         left: 0;
         width: 100%;
         z-index: 100;
-        border-bottom: 2px solid #3b82f6;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+        border-bottom: 0.125rem solid #3b82f6; /* 2px/16 = 0.125rem */
+        box-shadow: 0 0.3125rem 0.9375rem rgba(0, 0, 0, 0.5); /* 5px/16, 15px/16 */
     }
     
     .hotel-name {
-        font-size: 48px;
+        font-size: 4rem; /* 48px/16 = 3rem */
         font-weight: bold;
-        margin-bottom: 5px;
+        margin-bottom: 0.3125rem; /* 5px/16 */
         color: #3b82f6;
+        line-height: 1.2;
     }
     
     .hotel-subtitle {
-        font-size: 28px;
+        font-size: 1.75rem; /* 28px/16 = 1.75rem */
         color: #cbd5e1;
-        letter-spacing: 2px;
+        letter-spacing: 0.125rem; /* 2px/16 */
     }
     
+    /* 房价表区域 - 使用rem单位 */
     .price-table {
-        width: 28%;
-        background: rgba(30, 41, 59, 0.85);
+        width: 48%;
+        background: #EAE6D8;;
         position: absolute;
-        top: 12%;
+        top: 0;
         left: 0;
-        height: 88%;
+        height: 90%;
         overflow-y: auto;
-        padding: 25px 15px;
+        padding: 1.5625rem 0.9375rem; /* 25px/16, 15px/16 */
         z-index: 90;
-        border-right: 2px solid rgba(59, 130, 246, 0.3);
+        border-right: 0.125rem solid #D8D2C3; /* 2px/16 */
     }
     
     .price-title {
-        font-size: 24px;
+        font-size: 2.375rem; /* 38px/16 = 2.375rem */
         text-align: center;
-        margin-bottom: 30px;
-        padding-bottom: 15px;
-        border-bottom: 2px solid #f59e0b;
-        color: #fbbf24;
+        margin-bottom: 1.875rem; /* 30px/16 */
+        padding-bottom: 0.9375rem; /* 15px/16 */
+        border-bottom: 0.125rem solid #A69276; /* 2px/16 */
+        color: #A69276;
+        line-height: 1.3;
     }
     
     .room-item {
-        background: rgba(30, 41, 59, 0.9);
-        margin-bottom: 20px;
-        padding: 20px;
-        border-radius: 12px;
-        border-left: 5px solid #3b82f6;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        background: #D8D2C3;
+        margin-bottom: 1.25rem; /* 20px/16 */
+        padding: 1.25rem; /* 20px/16 */
+        border-radius: 0.75rem; /* 12px/16 */
+        border-left: 0.3125rem solid #F0C75E; /* 5px/16 */
+        box-shadow: 0 0.25rem 0.375rem rgba(0, 0, 0, 0.3); /* 4px/16, 6px/16 */
+        display: flex;
+        flex-wrap: wrap;
     }
     
+    /* 关键修改：房价名称和价格的字体大小调整 */
     .room-name {
-        font-size: 12px;
-        margin-bottom: 8px;
-        color: #93c5fd;
+        font-size: 2rem; /* 30px/16 = 1.875rem */
+        margin-bottom: 0.5rem; /* 8px/16 */
+        color: #A69276;
         font-weight: bold;
+        line-height: 1.3;
+        width: 60%;
     }
     
-    .room-price {
-        font-size: 12px;
+    .room-oldPrice {
+        font-size: 2rem; /* 40px/16 = 2.5rem - 适当减小 */
         font-weight: bold;
-        color: #fbbf24;
-        margin-bottom: 5px;
+        color: #5e5a55;
+        margin-bottom: 0.3125rem; /* 5px/16 */
+        line-height: 1.2;
+        text-decoration: line-through;
+        width: 38%;
+        text-align: right;
+    }
+    .room-price {
+        font-size: 3rem; /* 40px/16 = 2.5rem - 适当减小 */
+        font-weight: bold;
+        color: #8B7355;
+        margin-bottom: 0.3125rem; /* 5px/16 */
+        line-height: 1.2;
+        text-align: right;
+        width: 38%;
     }
     
     .room-desc {
-        font-size: 14px;
-        margin-top: 8px;
-        color: #94a3b8;
+        font-size: 1.5rem; /* 22px/16 = 1.375rem */
+        margin-top: 0.5rem; /* 8px/16 */
+        color: #af976f;
         line-height: 1.4;
+        width: 60%;
     }
     
+    /* 幻灯片区域 */
     .slideshow-area {
-        width: 72%;
+        width: 52%;
         position: absolute;
-        top: 12%;
-        left: 28%;
-        height: 88%;
+        top: 0;
+        left: 48%;
+        height: 90%;
         overflow: hidden;
     }
     
@@ -162,49 +217,40 @@
         bottom: 0;
         left: 0;
         width: 100%;
-        background: rgba(15, 23, 42, 0.8);
-        padding: 20px 40px;
-        font-size: 32px;
+        background: #EAE6D8;
+        padding: 1.25rem 2.5rem; /* 20px/16, 40px/16 */
+        font-size: 1.2rem; /* 32px/16 = 2rem */
         text-align: center;
-        color: #f8fafc;
-        font-weight: bold;
+        color: #7F8C8D;
+        line-height: 1.3;
     }
     
+    /* 公告栏 */
     .announcement-bar {
         position: absolute;
         bottom: 0;
         left: 0;
         width: 100%;
         background: #f59e0b;
-        color: #1e293b;
-        padding: 18px 0;
+        color: #FFF;
+        padding: 1.125rem 0; /* 18px/16 */
         z-index: 100;
-        height: 65px;
+        height: 10%; /* 65px/16 */
         overflow: hidden;
-        box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 -0.3125rem 0.9375rem rgba(0, 0, 0, 0.3); /* 5px/16, 15px/16 */
     }
     
-    .announcement-content {
-        display: inline-block;
+    .announcement-wrapper {
+        position: absolute;
         white-space: nowrap;
-        padding-left: 100%;
-        font-size: 26px;
-        font-weight: bold;
-        animation: scrollText 35s linear infinite;
+        font-size: 1.8rem; /* 26px/16 = 1.625rem */
+        line-height: 100%;
     }
     
-    @keyframes scrollText {
-        0% {
-            transform: translateX(0);
-        }
-        100% {
-            transform: translateX(-100%);
-        }
-    }
-    
+    /* 幻灯片指示器 */
     .slide-dots {
         position: absolute;
-        bottom: 75px;
+        bottom: 4.6875rem; /* 75px/16 */
         left: 0;
         width: 100%;
         text-align: center;
@@ -213,13 +259,13 @@
     
     .dot {
         display: inline-block;
-        width: 14px;
-        height: 14px;
-        margin: 0 8px;
+        width: 0.875rem; /* 14px/16 */
+        height: 0.875rem; /* 14px/16 */
+        margin: 0 0.5rem; /* 8px/16 */
         background-color: rgba(255, 255, 255, 0.3);
         border-radius: 50%;
         cursor: pointer;
-        border: 2px solid rgba(255, 255, 255, 0.5);
+        border: 0.125rem solid rgba(255, 255, 255, 0.5); /* 2px/16 */
     }
     
     .dot.active {
@@ -227,171 +273,226 @@
         border-color: #93c5fd;
     }
     
+    /* 时间显示 */
     .time-display {
         position: absolute;
-        bottom: 75px;
-        right: 30px;
-        background: rgba(15, 23, 42, 0.8);
-        padding: 10px 20px;
-        border-radius: 20px;
-        font-size: 24px;
-        color: #cbd5e1;
-        border: 1px solid rgba(59, 130, 246, 0.3);
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        top: 2.6875rem; /* 75px/16 */
+        right: 1.875rem; /* 30px/16 */
+        background: #EAE6D8;
+        padding: 0.625rem 1.25rem; /* 10px/16, 20px/16 */
+        border-radius: 1.25rem; /* 20px/16 */
+        font-size: 1.5rem; /* 24px/16 = 1.5rem */
+        color: #5D6D7E;
+        border: 0.0625rem solid #F0C75E; /* 1px/16 */
+        box-shadow: 0 0.25rem 0.375rem rgba(140, 140, 140, 0.25); /* 4px/16, 6px/16 */
         z-index: 95;
         text-align: center;
-        min-width: 300px;
+        min-width: 18.75rem; /* 300px/16 */
+        line-height: 1.3;
     }
     
     .date-row {
-        font-size: 20px;
-        margin-bottom: 5px;
-        color: #cbd5e1;
+        font-size: 1.25rem; /* 20px/16 = 1.25rem */
+        margin-bottom: 0.3125rem; /* 5px/16 */
+        color: #5D6D7E;
     }
     
     .time-row {
-        font-size: 28px;
+        font-size: 1.75rem; /* 28px/16 = 1.75rem */
         font-weight: bold;
-        color: #93c5fd;
+        color: #A69276;
     }
     
+    /* 加载状态 */
     .loading {
         position: fixed;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
         background: rgba(15, 23, 42, 0.9);
-        padding: 30px;
-        border-radius: 15px;
+        padding: 1.875rem; /* 30px/16 */
+        border-radius: 0.9375rem; /* 15px/16 */
         z-index: 1000;
         text-align: center;
-        border: 2px solid #3b82f6;
-        min-width: 300px;
+        border: 0.125rem solid #3b82f6; /* 2px/16 */
+        min-width: 18.75rem; /* 300px/16 */
     }
     
     .loading-text {
-        font-size: 28px;
+        font-size: 1.75rem; /* 28px/16 = 1.75rem */
         color: #93c5fd;
-        margin-top: 15px;
+        margin-top: 0.9375rem; /* 15px/16 */
     }
     
-    @media all and (-webkit-min-device-pixel-ratio:0) and (min-resolution: .001dpcm) {
-        .room-item, .header {
-            -webkit-transform: translateZ(0);
-        }
-    }
-    
-    @media screen and (max-width: 1366px) {
-        body {
-            font-size: 20px;
-        }
-        
-        .hotel-name {
-            font-size: 40px;
-        }
-        
-        .room-price {
-            font-size: 36px;
-        }
-        
-        .room-name {
-            font-size: 28px;
-        }
-        
-        .announcement-content {
-            font-size: 22px;
-        }
-        
-        .time-display {
-            min-width: 250px;
-            font-size: 20px;
-        }
-        
-        .date-row {
-            font-size: 18px;
-        }
-        
-        .time-row {
-            font-size: 24px;
-        }
-    }
-    
-    .price-table::-webkit-scrollbar {
-        width: 6px;
-    }
-    
-    .price-table::-webkit-scrollbar-track {
-        background: rgba(30, 41, 59, 0.5);
-        border-radius: 3px;
-    }
-    
-    .price-table::-webkit-scrollbar-thumb {
-        background: #3b82f6;
-        border-radius: 3px;
-    }
-    
+    /* 错误提示 */
     .error-message {
         background: rgba(239, 68, 68, 0.9);
         color: white;
-        padding: 15px;
-        border-radius: 10px;
-        margin: 10px;
+        padding: 0.9375rem; /* 15px/16 */
+        border-radius: 0.625rem; /* 10px/16 */
+        margin: 0.625rem; /* 10px/16 */
         text-align: center;
-        font-size: 22px;
+        font-size: 1.375rem; /* 22px/16 = 1.375rem */
         position: absolute;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
         z-index: 1000;
-        min-width: 400px;
+        min-width: 25rem; /* 400px/16 */
+    }
+    
+    /* 滚动条美化 */
+    .price-table::-webkit-scrollbar {
+        width: 0.375rem; /* 6px/16 */
+    }
+    
+    .price-table::-webkit-scrollbar-track {
+        background: rgba(30, 41, 59, 0.5);
+        border-radius: 0.1875rem; /* 3px/16 */
+    }
+    
+    .price-table::-webkit-scrollbar-thumb {
+        background: #3b82f6;
+        border-radius: 0.1875rem; /* 3px/16 */
+    }
+    
+    /* VIA浏览器专用修复 */
+    @media all and (-webkit-min-device-pixel-ratio:0) and (min-resolution: .001dpcm) {
+        /* 针对VIA浏览器的特殊优化 */
+        .room-item, .header {
+            -webkit-transform: translateZ(0);
+            transform: translateZ(0);
+        }
+        
+        /* 修复字体渲染 */
+        .room-name, .room-price, .hotel-name {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            text-rendering: optimizeLegibility;
+        }
+    }
+    
+    /* 字体大小调整的媒体查询 */
+    @media screen and (max-width: 1920px) {
+        .hotel-name {
+            font-size: 2.5rem; /* 40px */
+        }
+        
+        .room-price {
+            font-size: 2.25rem; /* 36px */
+        }
+        
+        .room-name {
+            font-size: 1.75rem; /* 28px */
+        }
+        
+        .announcement-wrapper {
+            font-size: 1.375rem; /* 22px */
+        }
+        
+        .time-display {
+            min-width: 15.625rem; /* 250px */
+            font-size: 1.25rem; /* 20px */
+        }
+        
+        .date-row {
+            font-size: 1.125rem; /* 18px */
+        }
+        
+        .time-row {
+            font-size: 1.5rem; /* 24px */
+        }
+    }
+    
+    /* 针对低分辨率电视的额外优化 */
+    @media screen and (max-height: 800px) {
+        .room-price {
+            font-size: 2rem; /* 32px - 在高度较小的屏幕上进一步减小 */
+        }
+        
+        .room-name {
+            font-size: 1.5rem; /* 24px */
+        }
+        
+        .price-title {
+            font-size: 1.875rem; /* 30px */
+            margin-bottom: 1.25rem; /* 20px */
+        }
+    }
+    
+    /* 针对高DPI设备的优化 */
+    @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+        /* 在高DPI设备上微调字体大小 */
+        .room-price {
+            font-size: 2.375rem; /* 38px */
+        }
+        
+        .room-name {
+            font-size: 1.75rem; /* 28px */
+        }
+        
+        .room-desc {
+            font-size: 1.25rem; /* 20px */
+        }
     }
 </style>
 </head>
 <body style="width: 100%;height: 100vh;margin: 0;position: relative;">
-    <div id="hotel-title" style="width: 100%;height: 12%;background-color: #082566;font-size: 32px;color: #FFF;font-weight: bold;padding-top: 1%;text-align: center;border-bottom: 1px #FFF solid;">
-        华美达安可酒店式公寓房价表
-    </div>
-<!-- 左侧房价表 -->
-<div class="price-table">
-    <div class="price-title">今日特惠房价</div>
-    <div id="rooms-container">
-        <!-- 动态房间数据会在这里显示 -->
-        <div class="loading">
-            <div class="loading-text">正在加载房价数据...</div>
+    <!-- 左侧房价表 -->
+    <!-- 房价表区域 -->
+    <div class="price-table">
+        <div id="hotel-name" style="width: 100%;height: 12%;font-size: 3.5rem;color: #8B7355;font-weight: bold;padding-top: 1%;text-align: center;">
+            华美达安可酒店式公寓房价表
+        </div>
+        <div class="price-title">今日特惠房价</div>
+        <div id="rooms-container">
+            <!-- 动态房间数据会在这里显示 -->
+            <div class="loading">
+                <div class="loading-text">正在加载房价数据...</div>
+           </div>
         </div>
     </div>
-</div>
 
-<!-- 右侧幻灯片 -->
+<!-- 幻灯片区域 -->
 <div class="slideshow-area">
     <div class="slideshow-container">
         <div class="slide active">
-            <img src="img/1.jpg" alt="豪华客房" class="slide-image" onerror="this.onerror=null;this.style.display='none';">
-            <div class="slide-caption">豪华客房 - 舒适的休息环境</div>
+            <img src="img/1.jpg" alt="酒店大楼" class="slide-image" onerror="this.onerror=null;this.style.display='none';">
+            <div class="slide-caption">酒店大楼</div>
         </div>
         
         <div class="slide">
-            <img src="img/2.jpg" alt="行政套房" class="slide-image" onerror="this.onerror=null;this.style.display='none';">
-            <div class="slide-caption">行政套房 - 商务与休闲的完美结合</div>
+            <img src="img/2.jpg" alt="影音双房" class="slide-image" onerror="this.onerror=null;this.style.display='none';">
+            <div class="slide-caption">影音双房 - 商务与休闲的完美结合</div>
         </div>
         
         <div class="slide">
-            <img src="img/4.jpg" alt="餐厅" class="slide-image" onerror="this.onerror=null;this.style.display='none';">
-            <div class="slide-caption">酒店餐厅 - 美味早餐与精致晚餐</div>
+            <img src="img/4.jpg" alt="影音大床" class="slide-image" onerror="this.onerror=null;this.style.display='none';">
+            <div class="slide-caption">影音大床 - 休闲观影两不误</div>
         </div>
         
         <div class="slide">
             <img src="img/5.jpg" alt="酒店大堂" class="slide-image" onerror="this.onerror=null;this.style.display='none';">
             <div class="slide-caption">酒店大堂 - 豪华舒适的接待环境</div>
         </div>
+        <div class="slide">
+            <img src="img/6.jpg" alt="影音双房" class="slide-image" onerror="this.onerror=null;this.style.display='none';">
+            <div class="slide-caption">影音双房 - 休闲观影两不误</div>
+        </div>
+        <div class="slide">
+            <img src="img/7.jpg" alt="影音双房" class="slide-image" onerror="this.onerror=null;this.style.display='none';">
+            <div class="slide-caption">影音双房 - 豪华舒适的休息环境</div>
+        </div>
     </div>
     
-    <!-- 幻灯片控制点 -->
+    <!-- 幻灯片指示器 -->
     <div class="slide-dots">
         <span class="dot active" data-index="0"></span>
         <span class="dot" data-index="1"></span>
         <span class="dot" data-index="2"></span>
         <span class="dot" data-index="3"></span>
+        <span class="dot" data-index="4"></span>
+        <span class="dot" data-index="5"></span>
     </div>
     
     <!-- 时间显示 -->
@@ -402,318 +503,473 @@
     </div>
 </div>
 
-<!-- 底部公告栏 -->
-<div class="announcement-bar" id="announcement-container">
-    <div class="announcement-content" id="announcement-content">
+<!-- 公告栏 -->
+<div class="announcement-bar" id="announcement-bar">
+    <div class="announcement-wrapper" id="announcement-wrapper">
         正在加载公告信息...
     </div>
 </div>
 </div>
 
-<!-- 简化JavaScript，避免使用ES6+语法 -->
 <script type="text/javascript">
-    // 农历转换函数 - 支持1900-2100年
-function getLunarDate(date) {
-    // 农历数据表 (1900-2100年)
-    var lunarInfo = [
-        0x04bd8, 0x04ae0, 0x0a570, 0x054d5, 0x0d260, 0x0d950, 0x16554, 0x056a0, 0x09ad0, 0x055d2,
-        0x04ae0, 0x0a5b6, 0x0a4d0, 0x0d250, 0x1d255, 0x0b540, 0x0d6a0, 0x0ada2, 0x095b0, 0x14977,
-        0x04970, 0x0a4b0, 0x0b4b5, 0x06a50, 0x06d40, 0x1ab54, 0x02b60, 0x09570, 0x052f2, 0x04970,
-        0x06566, 0x0d4a0, 0x0ea50, 0x06e95, 0x05ad0, 0x02b60, 0x186e3, 0x092e0, 0x1c8d7, 0x0c950,
-        0x0d4a0, 0x1d8a6, 0x0b550, 0x056a0, 0x1a5b4, 0x025d0, 0x092d0, 0x0d2b2, 0x0a950, 0x0b557,
-        0x06ca0, 0x0b550, 0x15355, 0x04da0, 0x0a5d0, 0x14573, 0x052d0, 0x0a9a8, 0x0e950, 0x06aa0,
-        0x0aea6, 0x0ab50, 0x04b60, 0x0aae4, 0x0a570, 0x05260, 0x0f263, 0x0d950, 0x05b57, 0x056a0,
-        0x096d0, 0x04dd5, 0x04ad0, 0x0a4d0, 0x0d4d4, 0x0d250, 0x0d558, 0x0b540, 0x0b5a0, 0x195a6,
-        0x095b0, 0x049b0, 0x0a974, 0x0a4b0, 0x0b27a, 0x06a50, 0x06d40, 0x0af46, 0x0ab60, 0x09570,
-        0x04af5, 0x04970, 0x064b0, 0x074a3, 0x0ea50, 0x06b58, 0x055c0, 0x0ab60, 0x096d5, 0x092e0,
-        0x0c960, 0x0d954, 0x0d4a0, 0x0da50, 0x07552, 0x056a0, 0x0abb7, 0x025d0, 0x092d0, 0x0cab5,
-        0x0a950, 0x0b4a0, 0x0baa4, 0x0ad50, 0x055d9, 0x04ba0, 0x0a5b0, 0x15176, 0x052b0, 0x0a930,
-        0x07954, 0x06aa0, 0x0ad50, 0x05b52, 0x04b60, 0x0a6e6, 0x0a4e0, 0x0d260, 0x0ea65, 0x0d530,
-        0x05aa0, 0x076a3, 0x096d0, 0x04bd7, 0x04ad0, 0x0a4d0, 0x1d0b6, 0x0d250, 0x0d520, 0x0dd45,
-        0x0b5a0, 0x056d0, 0x055b2, 0x049b0, 0x0a577, 0x0a4b0, 0x0aa50, 0x1b255, 0x06d20, 0x0ada0
-    ];
-    
-    // 天干
-    var heavenlyStems = ["甲", "乙", "丙", "丁", "戊", "己", "庚", "辛", "壬", "癸"];
-    // 地支
-    var earthlyBranches = ["子", "丑", "寅", "卯", "辰", "巳", "午", "未", "申", "酉", "戌", "亥"];
-    // 生肖
-    var zodiacAnimals = ["鼠", "牛", "虎", "兔", "龙", "蛇", "马", "羊", "猴", "鸡", "狗", "猪"];
-    // 农历月份
-    var lunarMonths = ["正月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "冬月", "腊月"];
-    // 农历日期
-    var lunarDays = ["初一", "初二", "初三", "初四", "初五", "初六", "初七", "初八", "初九", "初十",
-                    "十一", "十二", "十三", "十四", "十五", "十六", "十七", "十八", "十九", "二十",
-                    "廿一", "廿二", "廿三", "廿四", "廿五", "廿六", "廿七", "廿八", "廿九", "三十"];
-    
-    var year = date.getFullYear();
-    var month = date.getMonth() + 1;
-    var day = date.getDate();
-    
-    // 计算农历年份
-    var lunarYear = year;
-    if (month < 3 || (month == 3 && day < getLunarNewYear(year))) {
-        lunarYear = year - 1;
-    }
-    
-    // 计算天干地支年
-    var stemIndex = (lunarYear - 4) % 10;
-    var branchIndex = (lunarYear - 4) % 12;
-    if (stemIndex < 0) stemIndex += 10;
-    if (branchIndex < 0) branchIndex += 12;
-    
-    var ganZhiYear = heavenlyStems[stemIndex] + earthlyBranches[branchIndex];
-    var zodiac = zodiacAnimals[(lunarYear - 4) % 12];
-    
-    // 简化版农历日期计算
-    // 这里我们使用一个简单的示例算法，实际应用中应该使用完整的农历算法
-    // 由于完整的农历算法比较复杂，这里我们返回一个格式化的字符串
-    var lunarMonth = "正月";
-    var lunarDay = "初一";
-    
-    // 简单的农历日期近似计算（仅作示例）
-    var daysFromNewYear = Math.floor((date - new Date(year, 2, getLunarNewYear(year))) / (1000 * 60 * 60 * 24));
-    if (daysFromNewYear >= 0) {
-        var tempMonth = Math.floor(daysFromNewYear / 29.5);
-        var tempDay = Math.floor(daysFromNewYear % 29.5);
-        
-        if (tempMonth >= 0 && tempMonth < lunarMonths.length) {
-            lunarMonth = lunarMonths[tempMonth];
-        }
-        if (tempDay >= 0 && tempDay < lunarDays.length) {
-            lunarDay = lunarDays[tempDay];
-        }
-    }
-    
-    return ganZhiYear + "年(" + zodiac + "年) " + lunarMonth + lunarDay;
-}
-
-// 获取农历新年日期（简化版）
-function getLunarNewYear(year) {
-    // 这里应该是一个完整的农历新年日期表
-    // 为简化，我们假设为2月12日左右（实际应根据年份变化）
-    return 12; // 返回日期
-}
-
-// 格式化日期
-function formatDate(date) {
-    var weekdays = ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"];
-    var months = ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"];
-    
-    var year = date.getFullYear();
-    var month = date.getMonth();
-    var day = date.getDate();
-    var weekday = date.getDay();
-    
-    return year + "年" + months[month] + day + "日 " + weekdays[weekday];
-}
-
-// 更新时间显示
-function updateTime() {
-    var now = new Date();
-    
-    // 更新阳历日期
-    document.getElementById('solar-date').textContent = formatDate(now);
-    
-    // 更新农历日期
-    try {
-        var lunarDate = getLunarDate(now);
-        document.getElementById('lunar-date').textContent = lunarDate;
-    } catch (e) {
-        document.getElementById('lunar-date').textContent = "农历：计算错误";
-    }
-    
-    // 更新时间
-    var hours = now.getHours();
-    var minutes = now.getMinutes();
-    var seconds = now.getSeconds();
-    
-    hours = hours < 10 ? '0' + hours : hours;
-    minutes = minutes < 10 ? '0' + minutes : minutes;
-    seconds = seconds < 10 ? '0' + seconds : seconds;
-    
-    document.getElementById('current-time').textContent = hours + ':' + minutes + ':' + seconds;
-}
-
-// 从接口获取数据
-function fetchHotelData() {
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', 'https://www.zykj0579.com/api/hotelPrice/qtData.php', true);
-    xhr.timeout = 10000; // 10秒超时
-    
-    xhr.onload = function() {
-        console.log(xhr)
-        if (xhr.status === 200) {
-            try {
-                var data = JSON.parse(xhr.responseText);
-                updatePageWithData(data.data);
-            } catch (e) {
-                console.error('解析JSON数据失败:', e);
-                showError('数据格式错误，请稍后重试');
-            }
-        } else {
-            showError('网络请求失败，状态码: ' + xhr.status);
-        }
-    };
-    
-    xhr.onerror = function() {
-        showError('网络连接错误，请检查网络');
-    };
-    
-    xhr.ontimeout = function() {
-        showError('请求超时，请稍后重试');
-    };
-    
-    xhr.send();
-}
-
-// 使用模拟数据（当接口不可用时）
-function useMockData() {
-    var mockData = {
-        hotelName: "华美达安可酒店式公寓",
-        hotelSubtitle: "现代奢华 · 非凡体验 · 尊贵服务",
-        rooms: [
-            {
-                name: "巨幕舒适大床房",
-                price: "148",
-                desc: "20-25㎡ · 高速WiFi · 独立卫浴 · 不含双早"
-            },
-            {
-                name: "巨影音双床房",
-                price: "158",
-                desc: "25-30㎡ · 高速WiFi · 独立卫浴 · 不含双早"
-            },
-            {
-                name: "巨影音大床房",
-                price: "158",
-                desc: "25-30㎡ · 高速WiFi · 独立卫浴 · 不含双早"
-            },
-            {
-                name: "钟点房",
-                price: "68",
-                desc: "20-30㎡ · 高速WiFi · 独立卫浴 · 4H"
-            }
-        ],
-        announcement: "🎉 欢迎光临本酒店！停车场24小时免费开放。订房热线15268618128（微信同号） 🎉"
-    };
-    
-    updatePageWithData(mockData);
-}
-
-// 使用数据更新页面
-function updatePageWithData(data) {
-    console.log("a",data)
-    // 更新酒店名称
-    if (data.hotelName) {
-        document.getElementById('hotel-title').textContent = data.hotelName;
-    }
-    
-    // 更新酒店副标题
-    if (data.hotelSubtitle) {
-        document.getElementById('hotel-subtitle').textContent = data.hotelSubtitle;
-    }
-    
-    // 更新房价表
-    if (data.rooms && data.rooms.length > 0) {
-        var roomsContainer = document.getElementById('rooms-container');
-        roomsContainer.innerHTML = '';
-        
-        for (var i = 0; i < data.rooms.length; i++) {
-            var room = data.rooms[i];
-            var roomElement = document.createElement('div');
-            roomElement.className = 'room-item';
-            roomElement.innerHTML = 
-                '<div class="room-name">' + room.name + '</div>' +
-                '<div class="room-price">¥' + room.price + ' / 晚</div>' +
-                '<div class="room-desc">' + room.desc + '</div>';
-            
-            roomsContainer.appendChild(roomElement);
-        }
-    }
-    
-    // 更新公告
-    if (data.announcement) {
-        document.getElementById('announcement-content').textContent = data.announcement;
-    }
-}
-
-// 显示错误信息
-function showError(message) {
-    var errorElement = document.createElement('div');
-    errorElement.className = 'error-message';
-    errorElement.textContent = '⚠️ ' + message + ' (使用模拟数据)';
-    document.body.appendChild(errorElement);
-    
-    // 3秒后移除错误信息
-    setTimeout(function() {
-        if (errorElement.parentNode) {
-            errorElement.parentNode.removeChild(errorElement);
-        }
-    }, 3000);
-    
-    // 使用模拟数据
-    useMockData();
-}
-
-// 幻灯片相关变量
-var currentSlide = 0;
-var slides = document.getElementsByClassName('slide');
-var dots = document.getElementsByClassName('dot');
-var slideInterval;
-
-// 显示指定索引的幻灯片
-function showSlide(index) {
-    for (var i = 0; i < slides.length; i++) {
-        slides[i].className = 'slide';
-        dots[i].className = 'dot';
-    }
-    
-    if (slides[index]) {
-        slides[index].className = 'slide active';
-        dots[index].className = 'dot active';
-        currentSlide = index;
-    }
-}
-
-// 下一张幻灯片
-function nextSlide() {
-    var nextIndex = currentSlide + 1;
-    if (nextIndex >= slides.length) {
-        nextIndex = 0;
-    }
-    showSlide(nextIndex);
-}
-
-// 开始自动轮播
-function startSlideshow() {
-    if (slideInterval) {
-        clearInterval(slideInterval);
-    }
-    
-    slideInterval = setInterval(nextSlide, 6000);
-}
-
-// 为控制点添加点击事件
-for (var i = 0; i < dots.length; i++) {
-    (function(index) {
-        dots[index].onclick = function() {
-            showSlide(index);
-            startSlideshow();
-        };
-    })(i);
-}
-
-// 图片加载失败处理
-var images = document.getElementsByTagName('img');
-for (var j = 0; j < images.length; j++) {
-    images[j].onerror = function() {
-        this.style.display = 'none';
-    };
-}
-
 // 页面加载完成后执行
 window.onload = function() {
     console.log('页面加载完成，开始初始化...');
+    
+    // 动态调整根字体大小，适配不同设备
+    function adjustRootFontSize() {
+        var screenWidth = window.innerWidth || document.documentElement.clientWidth;
+        var baseFontSize;
+        
+        if (screenWidth >= 1920) {
+            baseFontSize = 16;
+        } else if (screenWidth >= 1366) {
+            baseFontSize = 14;
+        } else if (screenWidth >= 1024) {
+            baseFontSize = 12;
+        } else if (screenWidth >= 768) {
+            baseFontSize = 10;
+        } else {
+            baseFontSize = 9;
+        }
+        
+        // 计算rem基准值
+        var rootFontSize = (screenWidth / 1920) * baseFontSize;
+        document.documentElement.style.fontSize = rootFontSize + 'px';
+        
+        console.log('屏幕宽度:', screenWidth, '基准字体大小:', baseFontSize, '计算后根字体:', rootFontSize + 'px');
+    }
+    
+    // 初始调整
+    adjustRootFontSize();
+    
+    // 窗口大小变化时重新调整
+    window.addEventListener('resize', adjustRootFontSize);
+    
+    // // 更新时间显示
+    // function updateTime() {
+    //     var now = new Date();
+    //     var solarYear = now.getFullYear();
+    //     var solarMonth = now.getMonth() + 1;
+    //     var solarDay = now.getDate();
+    //     var solarWeek = ['日', '一', '二', '三', '四', '五', '六'][now.getDay()];
+        
+    //     // 更新阳历日期
+    //     document.getElementById('solar-date').textContent = solarYear + "年" + solarMonth + "月" + solarDay + "日 星期" + solarWeek;
+        
+    //     // 更新时间
+    //     var hours = now.getHours();
+    //     var minutes = now.getMinutes();
+    //     var seconds = now.getSeconds();
+        
+    //     hours = hours < 10 ? '0' + hours : hours;
+    //     minutes = minutes < 10 ? '0' + minutes : minutes;
+    //     seconds = seconds < 10 ? '0' + seconds : seconds;
+        
+    //     document.getElementById('current-time').textContent = hours + ':' + minutes + ':' + seconds;
+        
+    // }
+    
+    // 完整的农历计算类
+class LunarCalendar {
+    constructor() {
+        // 农历数据表 (1900-2100年)
+        this.lunarInfo = [
+            0x04bd8, 0x04ae0, 0x0a570, 0x054d5, 0x0d260, 0x0d950, 0x16554, 0x056a0, 0x09ad0, 0x055d2,
+            0x04ae0, 0x0a5b6, 0x0a4d0, 0x0d250, 0x1d255, 0x0b540, 0x0d6a0, 0x0ada2, 0x095b0, 0x14977,
+            0x04970, 0x0a4b0, 0x0b4b5, 0x06a50, 0x06d40, 0x1ab54, 0x02b60, 0x09570, 0x052f2, 0x04970,
+            0x06566, 0x0d4a0, 0x0ea50, 0x06e95, 0x05ad0, 0x02b60, 0x186e3, 0x092e0, 0x1c8d7, 0x0c950,
+            0x0d4a0, 0x1d8a6, 0x0b550, 0x056a0, 0x1a5b4, 0x025d0, 0x092d0, 0x0d2b2, 0x0a950, 0x0b557,
+            0x06ca0, 0x0b550, 0x15355, 0x04da0, 0x0a5d0, 0x14573, 0x052d0, 0x0a9a8, 0x0e950, 0x06aa0,
+            0x0aea6, 0x0ab50, 0x04b60, 0x0aae4, 0x0a570, 0x05260, 0x0f263, 0x0d950, 0x05b57, 0x056a0,
+            0x096d0, 0x04dd5, 0x04ad0, 0x0a4d0, 0x0d4d4, 0x0d250, 0x0d558, 0x0b540, 0x0b5a0, 0x195a6,
+            0x095b0, 0x049b0, 0x0a974, 0x0a4b0, 0x0b27a, 0x06a50, 0x06d40, 0x0af46, 0x0ab60, 0x09570,
+            0x04af5, 0x04970, 0x064b0, 0x074a3, 0x0ea50, 0x06b58, 0x055c0, 0x0ab60, 0x096d5, 0x092e0,
+            0x0c960, 0x0d954, 0x0d4a0, 0x0da50, 0x07552, 0x056a0, 0x0abb7, 0x025d0, 0x092d0, 0x0cab5,
+            0x0a950, 0x0b4a0, 0x0baa4, 0x0ad50, 0x055d9, 0x04ba0, 0x0a5b0, 0x15176, 0x052b0, 0x0a930,
+            0x07954, 0x06aa0, 0x0ad50, 0x05b52, 0x04b60, 0x0a6e6, 0x0a4e0, 0x0d260, 0x0ea65, 0x0d530,
+            0x05aa0, 0x076a3, 0x096d0, 0x04bd7, 0x04ad0, 0x0a4d0, 0x1d0b6, 0x0d250, 0x0d520, 0x0dd45,
+            0x0b5a0, 0x056d0, 0x055b2, 0x049b0, 0x0a577, 0x0a4b0, 0x0aa50, 0x1b255, 0x06d20, 0x0ada0
+        ];
+        
+        // 天干
+        this.heavenlyStems = ["甲", "乙", "丙", "丁", "戊", "己", "庚", "辛", "壬", "癸"];
+        // 地支
+        this.earthlyBranches = ["子", "丑", "寅", "卯", "辰", "巳", "午", "未", "申", "酉", "戌", "亥"];
+        // 生肖
+        this.zodiacAnimals = ["鼠", "牛", "虎", "兔", "龙", "蛇", "马", "羊", "猴", "鸡", "狗", "猪"];
+        // 农历月份
+        this.lunarMonths = ["正月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "冬月", "腊月"];
+        // 农历日期
+        this.lunarDays = ["初一", "初二", "初三", "初四", "初五", "初六", "初七", "初八", "初九", "初十",
+                         "十一", "十二", "十三", "十四", "十五", "十六", "十七", "十八", "十九", "二十",
+                         "廿一", "廿二", "廿三", "廿四", "廿五", "廿六", "廿七", "廿八", "廿九", "三十"];
+        // 节气
+        this.solarTerms = ["小寒", "大寒", "立春", "雨水", "惊蛰", "春分", "清明", "谷雨", "立夏", "小满", 
+                         "芒种", "夏至", "小暑", "大暑", "立秋", "处暑", "白露", "秋分", "寒露", "霜降", 
+                         "立冬", "小雪", "大雪", "冬至"];
+        
+        // 公历每月天数（非闰年）
+        this.solarMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+    }
+    
+    // 获取农历某年的闰月，0表示无闰月
+    getLeapMonth(lunarYear) {
+        return this.lunarInfo[lunarYear - 1900] & 0xf;
+    }
+    
+    // 获取农历某年闰月的天数
+    getLeapMonthDays(lunarYear) {
+        if (this.getLeapMonth(lunarYear)) {
+            return (this.lunarInfo[lunarYear - 1900] & 0x10000) ? 30 : 29;
+        }
+        return 0;
+    }
+    
+    // 获取农历某年某月的天数
+    getLunarMonthDays(lunarYear, lunarMonth) {
+        if ((this.lunarInfo[lunarYear - 1900] & (0x10000 >> lunarMonth)) == 0) {
+            return 29;
+        } else {
+            return 30;
+        }
+    }
+    
+    // 获取农历某年的总天数
+    getLunarYearDays(lunarYear) {
+        let sum = 348; // 29天 * 12个月
+        for (let i = 0x8000; i > 0x8; i >>= 1) {
+            sum += (this.lunarInfo[lunarYear - 1900] & i) ? 1 : 0;
+        }
+        return sum + this.getLeapMonthDays(lunarYear);
+    }
+    
+    // 判断是否是闰年
+    isLeapYear(year) {
+        return ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0);
+    }
+    
+    // 公历转农历
+    solarToLunar(solarYear, solarMonth, solarDay) {
+        // 1900年1月31日是农历1900年正月初一
+        let baseDate = new Date(1900, 0, 31);
+        let targetDate = new Date(solarYear, solarMonth - 1, solarDay);
+        
+        // 计算两个日期之间的天数差
+        let offset = Math.floor((targetDate - baseDate) / 86400000);
+        
+        let lunarYear, lunarMonth, lunarDay;
+        let isLeap = false;
+        
+        // 计算农历年
+        let days = 0;
+        for (lunarYear = 1900; lunarYear < 2100 && offset > 0; lunarYear++) {
+            days = this.getLunarYearDays(lunarYear);
+            offset -= days;
+        }
+        
+        if (offset < 0) {
+            offset += days;
+            lunarYear--;
+        }
+        
+        // 计算农历月
+        let leapMonth = this.getLeapMonth(lunarYear);
+        isLeap = false;
+        
+        for (lunarMonth = 1; lunarMonth < 13 && offset > 0; lunarMonth++) {
+            // 处理闰月
+            if (leapMonth > 0 && lunarMonth == (leapMonth + 1) && !isLeap) {
+                lunarMonth--;
+                isLeap = true;
+                days = this.getLeapMonthDays(lunarYear);
+            } else {
+                days = this.getLunarMonthDays(lunarYear, lunarMonth);
+            }
+            
+            offset -= days;
+            
+            // 如果不是闰月，或者闰月已经处理过
+            if (isLeap && lunarMonth == (leapMonth + 1)) {
+                isLeap = false;
+            }
+        }
+        
+        if (offset == 0 && leapMonth > 0 && lunarMonth == leapMonth + 1) {
+            if (isLeap) {
+                isLeap = false;
+            } else {
+                isLeap = true;
+                lunarMonth--;
+            }
+        }
+        
+        if (offset < 0) {
+            offset += days;
+            lunarMonth--;
+        }
+        
+        // 计算农历日
+        lunarDay = offset + 1;
+        
+        // 计算天干地支年
+        let stemIndex = (lunarYear - 4) % 10;
+        let branchIndex = (lunarYear - 4) % 12;
+        stemIndex = stemIndex < 0 ? stemIndex + 10 : stemIndex;
+        branchIndex = branchIndex < 0 ? branchIndex + 12 : branchIndex;
+        
+        let ganZhiYear = this.heavenlyStems[stemIndex] + this.earthlyBranches[branchIndex];
+        let zodiac = this.zodiacAnimals[branchIndex];
+        
+        // 获取农历月份名称
+        let monthName = '';
+        if (isLeap) {
+            monthName = '闰' + this.lunarMonths[lunarMonth - 1];
+        } else {
+            monthName = this.lunarMonths[lunarMonth - 1];
+        }
+        
+        // 获取农历日期名称
+        let dayName = this.lunarDays[lunarDay - 1];
+        
+        return {
+            year: lunarYear,
+            month: lunarMonth,
+            day: lunarDay,
+            isLeap: isLeap,
+            monthName: monthName,
+            dayName: dayName,
+            ganZhiYear: ganZhiYear,
+            zodiac: zodiac,
+            fullName: ganZhiYear + '年(' + zodiac + '年) ' + monthName + dayName
+        };
+    }
+    
+    // 获取节日（简化版）
+    getFestival(solarMonth, solarDay, lunarMonth, lunarDay, isLeap) {
+        // 公历节日
+        if (solarMonth == 1 && solarDay == 1) return '元旦';
+        if (solarMonth == 5 && solarDay == 1) return '劳动节';
+        if (solarMonth == 10 && solarDay == 1) return '国庆节';
+        
+        // 农历节日
+        if (!isLeap) {
+            if (lunarMonth == 1 && lunarDay == 1) return '春节';
+            if (lunarMonth == 1 && lunarDay == 15) return '元宵节';
+            if (lunarMonth == 5 && lunarDay == 5) return '端午节';
+            if (lunarMonth == 8 && lunarDay == 15) return '中秋节';
+            if (lunarMonth == 9 && lunarDay == 9) return '重阳节';
+            if (lunarMonth == 12 && lunarDay == 30) return '除夕';
+        }
+        
+        return '';
+    }
+}
+
+// 初始化农历计算器
+const lunarCalendar = new LunarCalendar();
+// 更新时间显示
+function updateTime() {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = now.getMonth() + 1;
+    const day = now.getDate();
+    const week = ['日', '一', '二', '三', '四', '五', '六'][now.getDay()];
+    
+    // 更新阳历日期
+    document.getElementById('solar-date').textContent = 
+        `${year}年${month}月${day}日 星期${week}`;
+    
+    // 更新农历日期
+    try {
+        const lunar = lunarCalendar.solarToLunar(year, month, day);
+        const festival = lunarCalendar.getFestival(month, day, lunar.month, lunar.day, lunar.isLeap);
+        
+        let lunarText = `${lunar.fullName}`;
+        if (festival) {
+            lunarText += ` ${festival}`;
+        }
+        document.getElementById('lunar-date').textContent = lunarText;
+    } catch (error) {
+        console.error('农历计算错误:', error);
+        document.getElementById('lunar-date').textContent = '农历：计算错误';
+    }
+    
+    // 更新时间
+    const hours = now.getHours().toString().padStart(2, '0');
+    const minutes = now.getMinutes().toString().padStart(2, '0');
+    const seconds = now.getSeconds().toString().padStart(2, '0');
+    
+    document.getElementById('current-time').textContent = 
+        `${hours}:${minutes}:${seconds}`;
+}
+    
+    // 从接口获取数据
+    function fetchHotelData() {
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', 'https://www.zykj0579.com/api/hotelPrice/qtData.php', true);
+        xhr.timeout = 10000; // 10秒超时
+        
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                try {
+                    var data = JSON.parse(xhr.responseText);
+                    updatePageWithData(data.data);
+                } catch (e) {
+                    console.error('解析JSON数据失败:', e);
+                    useMockData();
+                }
+            } else {
+                console.error('网络请求失败，状态码:', xhr.status);
+                useMockData();
+            }
+        };
+        
+        xhr.onerror = function() {
+            console.error('网络连接错误');
+            useMockData();
+        };
+        
+        xhr.ontimeout = function() {
+            console.error('请求超时');
+            useMockData();
+        };
+        
+        xhr.send();
+    }
+    
+    // 使用模拟数据
+    function useMockData() {
+        console.log('使用模拟数据');
+        // 模拟数据已经在HTML中，无需额外操作
+    }
+    
+    // 使用数据更新页面
+    function updatePageWithData(data) {
+        // 更新酒店名称
+        if (data.hotelName) {
+            document.getElementById('hotel-name').textContent = data.hotelName;
+        }
+        
+        // 更新酒店副标题
+        if (data.hotelSubtitle) {
+            document.getElementById('hotel-subtitle').textContent = data.hotelSubtitle;
+        }
+        
+        // 更新房价表
+        if (data.rooms && data.rooms.length > 0) {
+            var roomsContainer = document.getElementById('rooms-container');
+            roomsContainer.innerHTML = '';
+            
+            for (var i = 0; i < data.rooms.length; i++) {
+                var room = data.rooms[i];
+                var roomElement = document.createElement('div');
+                roomElement.className = 'room-item';
+                roomElement.innerHTML = 
+                    '<div class="room-name">' + room.name + '</div>' +
+                    '<div class="room-oldPrice">¥' + room.market+ ' </div>' +
+                    '<div class="room-desc">' + room.desc + '</div>' +
+                    '<div class="room-price">¥' + room.price + ' / 晚</div>';
+                
+                roomsContainer.appendChild(roomElement);
+            }
+        }
+        
+        // 更新公告
+        if (data.announcement) {
+            document.getElementById('announcement-wrapper').textContent = data.announcement;
+        }
+        // 开始公告滚动
+        startAnnouncementScroll();
+    }
+    
+    // 幻灯片相关变量
+    var currentSlide = 0;
+    var slides = document.getElementsByClassName('slide');
+    var dots = document.getElementsByClassName('dot');
+    var slideInterval;
+    
+    // 显示指定索引的幻灯片
+    function showSlide(index) {
+        for (var i = 0; i < slides.length; i++) {
+            slides[i].className = 'slide';
+            dots[i].className = 'dot';
+        }
+        
+        if (slides[index]) {
+            slides[index].className = 'slide active';
+            dots[index].className = 'dot active';
+            currentSlide = index;
+        }
+    }
+    
+    // 下一张幻灯片
+    function nextSlide() {
+        var nextIndex = currentSlide + 1;
+        if (nextIndex >= slides.length) {
+            nextIndex = 0;
+        }
+        showSlide(nextIndex);
+    }
+    
+    // 开始自动轮播
+    function startSlideshow() {
+        if (slideInterval) {
+            clearInterval(slideInterval);
+        }
+        
+        slideInterval = setInterval(nextSlide, 6000);
+    }
+    
+    // 为控制点添加点击事件
+    for (var i = 0; i < dots.length; i++) {
+        (function(index) {
+            dots[index].onclick = function() {
+                showSlide(index);
+                startSlideshow();
+            };
+        })(i);
+    }
+    
+    // 公告滚动函数
+    function startAnnouncementScroll() {
+        var announcementWrapper = document.getElementById('announcement-wrapper');
+        var announcementBar = document.getElementById('announcement-bar');
+        var announcementText = announcementWrapper.textContent;
+        
+        // 创建滚动的文本（重复一次以实现无缝滚动）
+        announcementWrapper.textContent = announcementText;
+        
+        var wrapperWidth = announcementWrapper.offsetWidth;
+        var barWidth = announcementBar.offsetWidth;
+        var position = barWidth;
+        
+        function scrollAnnouncement() {
+            position -= 1; // 每次移动1像素
+            
+            // 当文本完全滚动出左侧边界时，重置位置
+            if (position < -wrapperWidth) {
+                position = barWidth;
+            }
+            
+            // 应用移动
+            announcementWrapper.style.transform = 'translateX(' + position + 'px)';
+            
+            // 继续动画
+            requestAnimationFrame(scrollAnnouncement);
+        }
+        
+        // 开始滚动
+        requestAnimationFrame(scrollAnnouncement);
+    }
+    
+    // 图片加载失败处理
+    var images = document.getElementsByTagName('img');
+    for (var j = 0; j < images.length; j++) {
+        images[j].onerror = function() {
+            this.style.display = 'none';
+        };
+    }
     
     // 初始化时间显示
     updateTime();
@@ -723,25 +979,13 @@ window.onload = function() {
     showSlide(0);
     startSlideshow();
     
+    
+    
     // 从接口获取数据
     fetchHotelData();
     
-    // 添加错误处理
-    window.onerror = function(msg, url, line) {
-        console.log('页面错误: ' + msg + ' at ' + url + ':' + line);
-        return true;
-    };
-    
     console.log('初始化完成');
 };
-
-// 简单的重试机制 - 如果页面加载失败，5秒后重试
-setTimeout(function() {
-    if (!document.body || document.body.innerHTML === '') {
-        console.log('页面加载异常，尝试刷新...');
-        window.location.reload();
-    }
-}, 5000);
 </script>
 </body>
 </html>
