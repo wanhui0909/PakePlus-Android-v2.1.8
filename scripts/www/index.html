@@ -107,7 +107,7 @@
     /* 房价表区域 - 使用rem单位 */
     .price-table {
         width: 40%;
-        background: #EAE6D8;;
+        background: #FFF;;
         position: absolute;
         top: 0;
         left: 0;
@@ -129,7 +129,7 @@
     }
     
     .room-item {
-        background: #D8D2C3;
+        background: #EAE6D8;
         margin-bottom: 1.25rem; /* 20px/16 */
         padding: 1.25rem; /* 20px/16 */
         border-radius: 0.75rem; /* 12px/16 */
@@ -143,14 +143,14 @@
     .room-name {
         font-size: 3.5rem; /* 30px/16 = 1.875rem */
         margin-bottom: 0.5rem; /* 8px/16 */
-        color: #5e5a55;
+        color: #2C3E50;
         font-weight: bold;
         line-height: 1.3;
         width: 60%;
     }
     
     .room-oldPrice {
-        font-size: 3.5rem; /* 40px/16 = 2.5rem - 适当减小 */
+        font-size: 2.8rem; /* 40px/16 = 2.5rem - 适当减小 */
         font-weight: bold;
         color: #5e5a55;
         margin-bottom: 0.3125rem; /* 5px/16 */
@@ -162,7 +162,7 @@
     .room-price {
         font-size: 4rem; /* 40px/16 = 2.5rem - 适当减小 */
         font-weight: bold;
-        color: #8B7355;
+        color: #a17f0f;
         margin-bottom: 0.3125rem; /* 5px/16 */
         line-height: 1.2;
         text-align: right;
@@ -170,9 +170,9 @@
     }
     
     .room-desc {
-        font-size: 3rem; /* 22px/16 = 1.375rem */
+        font-size: 2.2rem; /* 22px/16 = 1.375rem */
         margin-top: 0.5rem; /* 8px/16 */
-        color: #af976f;
+        color: #5e5a55;
         line-height: 1.4;
         width: 60%;
     }
@@ -219,7 +219,7 @@
         width: 100%;
         background: #EAE6D8;
         padding: 1.25rem 2.5rem; /* 20px/16, 40px/16 */
-        font-size: 1.2rem; /* 32px/16 = 2rem */
+        font-size: 1.8rem; /* 32px/16 = 2rem */
         text-align: center;
         color: #7F8C8D;
         line-height: 1.3;
@@ -278,10 +278,10 @@
         position: absolute;
         top: 2.6875rem; /* 75px/16 */
         right: 1.875rem; /* 30px/16 */
-        background: #EAE6D8;
+        background: #F5F1E6;
         padding: 0.625rem 1.25rem; /* 10px/16, 20px/16 */
         border-radius: 1.25rem; /* 20px/16 */
-        font-size: 1.5rem; /* 24px/16 = 1.5rem */
+        font-size: 2rem; /* 24px/16 = 1.5rem */
         color: #5D6D7E;
         border: 0.0625rem solid #F0C75E; /* 1px/16 */
         box-shadow: 0 0.25rem 0.375rem rgba(140, 140, 140, 0.25); /* 4px/16, 6px/16 */
@@ -289,16 +289,17 @@
         text-align: center;
         min-width: 18.75rem; /* 300px/16 */
         line-height: 1.3;
+        opacity: 0.8;
     }
     
     .date-row {
-        font-size: 1.75rem; /* 20px/16 = 1.25rem */
+        font-size: 2.25rem; /* 20px/16 = 1.25rem */
         margin-bottom: 0.3125rem; /* 5px/16 */
         color: #5D6D7E;
     }
     
     .time-row {
-        font-size: 2.25rem; /* 28px/16 = 1.75rem */
+        font-size: 2.75rem; /* 28px/16 = 1.75rem */
         font-weight: bold;
         color: #A69276;
     }
@@ -392,30 +393,30 @@
         
         .time-display {
             min-width: 15.625rem; /* 250px */
-            font-size: 1.25rem; /* 20px */
+            font-size: 2rem; /* 20px */
         }
         
         .date-row {
-            font-size: 1.125rem; /* 18px */
+            font-size: 2rem; /* 18px */
         }
         
         .time-row {
-            font-size: 1.5rem; /* 24px */
+            font-size: 2.75rem; /* 24px */
         }
     }
     
     /* 针对低分辨率电视的额外优化 */
     @media screen and (max-height: 800px) {
         .room-price {
-            font-size: 2rem; /* 32px - 在高度较小的屏幕上进一步减小 */
+            font-size: 3.5rem; /* 32px - 在高度较小的屏幕上进一步减小 */
         }
         
         .room-name {
-            font-size: 1.5rem; /* 24px */
+            font-size: 3rem; /* 24px */
         }
         
         .price-title {
-            font-size: 1.875rem; /* 30px */
+            font-size: 2.5rem; /* 30px */
             margin-bottom: 1.25rem; /* 20px */
         }
     }
@@ -444,7 +445,7 @@
         <div id="hotel-name" style="width: 100%;height: 12%;font-size: 5rem;color: #8B7355;font-weight: bold;padding-top: 1%;text-align: center;">
             华美达安可酒店式公寓房价表
         </div>
-        <div class="price-title">今日特惠房价</div>
+        <div class="price-title">今&nbsp;&nbsp;日&nbsp;&nbsp;房&nbsp;&nbsp;价</div>
         <div id="rooms-container">
             <!-- 动态房间数据会在这里显示 -->
             <div class="loading">
@@ -882,6 +883,10 @@ function updateTime() {
         }
         // 开始公告滚动
         startAnnouncementScroll();
+        setInterval(function(){
+            // 从接口获取数据
+            fetchHotelData();
+        },180000)
     }
     
     // 幻灯片相关变量
