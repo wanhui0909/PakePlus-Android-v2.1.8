@@ -1,0 +1,18 @@
+{
+    "basic": {
+        "hotelName": "全季酒店",
+        "hotelNameEn": "JI HOTEL",
+        "welcomeMainText": "全季酒店，自然得体",
+        "welcomeSubText": "给您家一般的入住体验",
+        "welcomeTipText": "按OK键进入服务中心",
+        "wifiInfo": "WIFI：HUAZHU-JiHotel（免密码）",
+        "weatherInfo": "实时天气：{{weather}}",
+        "countdown": 3,
+        "mainImage": "images/template1/main.jpg"
+    },
+    "carouselImages": [
+        "images/template1/bg1.jpg",
+        "images/template1/bg2.jpg",
+        "images/template1/bg3.jpg"
+    ]
+}
