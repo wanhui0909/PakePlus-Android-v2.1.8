@@ -893,7 +893,7 @@ function updateTime() {
             if (isPaused) return;
             
             const now = Date.now();
-            if (now - lastScrollTime < 16) return; // 控制60fps
+            if (now - lastScrollTime < 100) return; // 控制60fps
             
             scrollPosition -= scrollSpeed;
             
@@ -907,13 +907,13 @@ function updateTime() {
                 setTimeout(() => {
                     isPaused = false;
                     lastScrollTime = Date.now();
-                }, scrollPauseTime);
+                }, Math.floor(Math.random() * scrollPauseTime) + scrollPauseTime);
             }
             
             // 应用滚动
             wrapper.style.transform = `translateY(${scrollPosition}px)`;
             lastScrollTime = now;
-        }, 16);
+        }, 100);
     }
     
     // 使用数据更新页面
