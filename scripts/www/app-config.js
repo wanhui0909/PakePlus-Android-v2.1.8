@@ -21,7 +21,7 @@
                     id: "tv",
                     name: "看电视",
                     type: "app",
-                    appUrl: "tv://play",
+                    appUrl: "yourtv://launch?source=hotel",
                     audio: "audio/tv.mp3",
                     desc: "跳转至电视直播APP"
                 },
