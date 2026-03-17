@@ -18,12 +18,12 @@
             ],
             bottomNav: [
                 {
-                    id: "tv",
-                    name: "看电视",
-                    type: "app",
-                    appUrl: "yourtv://launch?source=hotel",
-                    audio: "audio/tv.mp3",
-                    desc: "跳转至电视直播APP"
+                    "id": "tv",
+                    "name": "看电视",
+                    "type": "app",
+                    "appUrl": "intent://com.horsemail.yourtv/launch?source=hotel#Intent;scheme=android;package=com.horsemail.yourtv;action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;end",
+                    "audio": "audio/tv.mp3",
+                    "desc": "跳转至自定义直播APP，支持本地频道添加"
                 },
                 {
                     id: "brand",
