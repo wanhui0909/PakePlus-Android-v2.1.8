@@ -255,7 +255,7 @@
 
         .welcome-bottom-nav {
             position: absolute;
-            bottom: 30px;
+            bottom: 80px;
             left: 0;
             width: 100%;
             display: flex;
@@ -273,8 +273,8 @@
             transition: color 0.3s;
         }
         .nav-item.active {
-            color: var(--nav-active);
-            font-weight: 500;
+            color: #34c6c6;
+            font-weight: bold;
         }
         .nav-item:hover { color: var(--nav-active); }
 
@@ -765,6 +765,7 @@
         <div class="audio-icon"><i class="fas fa-volume-up"></i></div>
     </div>
 
+    <script src="https://cdn.bootcdn.net/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
     <script type="text/javascript" src="app-config.js"></script>
     <script type="text/javascript" src="settings.js"></script>
     <script>
@@ -891,7 +892,7 @@
             switch (navConfig.type) {
                 case 'app':
                     // 模拟APP跳转
-                    alert(`跳转至${navConfig.name}：${navConfig.appUrl}`);
+                    window.location.href = navConfig.appUrl;
                     playAudio(navConfig.audio);
                     break;
                 case 'modal':
@@ -939,6 +940,293 @@
                 audio.play();
             } catch (e) {
                 console.log('音频播放失败：', e);
+            }
+        }
+
+        // PakePlus 文件同步配置（适配 Tauri 环境）
+        const syncConfig = {
+            serverUrl: "https://www.zykj0579.com/api/hotelVideo", // 你的服务器接口
+            checkInterval: 30 * 60 * 1000, // 30分钟检测一次（测试时可改5*60*1000=5分钟）
+            localDir: "/hotel-resources/", // 应用内资源目录
+            syncFileTypes: ["txt", "mp3", "json", "jpg", "png"], // 需要同步的文件类型
+            appDataDir: "", // 动态获取，不用改
+            tempDir: "",    // 动态获取，不用改
+            logDir: ""      // 动态获取，不用改
+        };
+
+        // 本地文件版本缓存
+        let localFileVersions = {};
+        // Tauri API 实例（PakePlus 内置）
+        let tauriFs = null;
+        let tauriPath = null;
+
+        /**
+         * 初始化 PakePlus/Tauri 环境（必须）
+         */
+        async function initTauriEnv() {
+            try {
+                // 检测是否为 PakePlus 环境
+                if (window.__TAURI__ && window.__TAURI__.fs && window.__TAURI__.path) {
+                    tauriFs = window.__TAURI__.fs;
+                    tauriPath = window.__TAURI__.path;
+          
+                    // 获取 PakePlus 应用可写目录
+                    syncConfig.appDataDir = await tauriPath.appDataDir();
+                    // 拼接实际路径
+                    syncConfig.localDir = await tauriPath.join(syncConfig.appDataDir, "hotel-resources");
+                    syncConfig.tempDir = await tauriPath.join(syncConfig.appDataDir, "temp");
+                    syncConfig.logDir = await tauriPath.join(syncConfig.appDataDir, "logs");
+          
+                    // 创建必要目录
+                    await createDirIfNotExist(syncConfig.localDir);
+                    await createDirIfNotExist(syncConfig.tempDir);
+                    await createDirIfNotExist(syncConfig.logDir);
+          
+                    console.log("PakePlus 环境初始化成功，本地目录：", syncConfig.localDir);
+                    return true;
+                } else {
+                    throw new Error("非 PakePlus/Tauri 环境，无法同步文件");
+                }
+            } catch (error) {
+                console.error("PakePlus 环境初始化失败：", error);
+                return false;
+            }
+        }
+
+        /**
+        * 辅助：创建目录（不存在则创建）
+        */
+        async function createDirIfNotExist(dirPath) {
+            try {
+                await tauriFs.createDir(dirPath, { recursive: true });
+            } catch (error) {
+                if (!error.message.includes("already exists")) {
+                    throw error;
+                }
+            }
+        }
+
+         /**
+         * 初始化文件同步
+         */
+        async function initFileSync() {
+            // 先初始化 Tauri 环境
+            const tauriReady = await initTauriEnv();
+            if (!tauriReady) {
+                console.warn("文件同步服务启动失败：PakePlus 环境异常");
+                return;
+            }
+      
+            // 加载版本缓存
+            await loadLocalVersionCache();
+      
+            // 立即同步一次
+            await checkAndSyncFiles();
+      
+            // 定时同步
+            setInterval(async () => {
+                await checkAndSyncFiles();
+            }, syncConfig.checkInterval);
+      
+            console.log(`文件同步服务已启动，检测间隔：${syncConfig.checkInterval / 60000}分钟`);
+        }
+
+        /**
+        * 检测并同步文件
+        */
+        async function checkAndSyncFiles() {
+            try {
+                // 请求服务器文件列表
+                const serverResponse = await fetch(syncConfig.serverUrl, {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Cache-Control": "no-cache"
+                    },
+                    timeout: 10000
+                });
+
+                if (!serverResponse.ok) {
+                    throw new Error(`服务器请求失败，状态码：${serverResponse.status}`);
+                }
+
+                const serverFiles = await serverResponse.json();
+                if (!serverFiles || !Array.isArray(serverFiles)) {
+                    throw new Error("服务器返回数据格式错误（需为数组）");
+                }
+
+                // 筛选需要更新的文件
+                const filesToUpdate = [];
+                for (const serverFile of serverFiles) {
+                    if (!serverFile.filePath || !serverFile.md5 || !serverFile.updateTime) {
+                        console.warn("服务器文件信息不完整：", serverFile);
+                        continue;
+                    }
+
+                    // 过滤文件类型
+                    const fileExt = serverFile.filePath.split(".").pop().toLowerCase();
+                    if (!syncConfig.syncFileTypes.includes(fileExt)) {
+                        continue;
+                    }
+
+                    // 对比版本
+                    const localFile = localFileVersions[serverFile.filePath];
+                    if (!localFile || localFile.md5 !== serverFile.md5 || new Date(localFile.updateTime) < new Date(serverFile.updateTime)) {
+                        filesToUpdate.push(serverFile);
+                    }
+                }
+
+                if (filesToUpdate.length === 0) {
+                    console.log("暂无需要更新的文件");
+                    return;
+                }
+
+                console.log(`发现 ${filesToUpdate.length} 个文件需要更新：`, filesToUpdate);
+                // 批量下载替换
+                let successCount = 0;
+                for (const file of filesToUpdate) {
+                    const downloadSuccess = await downloadAndReplaceFile(file);
+                    if (downloadSuccess) {
+                        successCount++;
+                        localFileVersions[file.filePath] = {
+                            md5: file.md5,
+                            updateTime: file.updateTime,
+                            syncTime: new Date().toISOString()
+                        };
+                    }
+                }
+
+                // 保存缓存
+                await saveLocalVersionCache();
+
+                // 记录日志
+                await logSyncResult(filesToUpdate.length, successCount);
+
+                console.log(`文件同步完成：成功更新 ${successCount}/${filesToUpdate.length} 个文件`);
+
+            } catch (error) {
+                console.error("文件同步失败：", error);
+                await logSyncError(error);
+            }
+        }
+
+        /**
+        * 下载并替换文件
+        */
+        async function downloadAndReplaceFile(fileInfo) {
+            try {
+                // 构建下载地址
+                const downloadUrl = fileInfo.downloadUrl || `${syncConfig.serverUrl}/download?file=${encodeURIComponent(fileInfo.filePath)}`;
+        
+                // 临时文件路径
+                const tempFileName = fileInfo.filePath.split("/").pop();
+                const tempFilePath = await tauriPath.join(syncConfig.tempDir, tempFileName);
+        
+                // 下载文件
+                const response = await fetch(downloadUrl);
+                if (!response.ok) {
+                    throw new Error(`文件下载失败：${downloadUrl}，状态码：${response.status}`);
+                }
+
+                // 读取二进制数据
+                const fileBlob = await response.blob();
+                const fileArrayBuffer = await fileBlob.arrayBuffer();
+        
+                // 校验 MD5
+                const downloadedMd5 = await calculateMD5(fileArrayBuffer);
+                if (downloadedMd5 !== fileInfo.md5) {
+                    throw new Error(`MD5 校验失败：${fileInfo.filePath}（本地：${downloadedMd5}，服务器：${fileInfo.md5}）`);
+                }
+
+                // 写入临时文件
+                await tauriFs.writeBinaryFile(tempFilePath, new Uint8Array(fileArrayBuffer));
+        
+                // 目标文件路径
+                const targetFilePath = await tauriPath.join(syncConfig.localDir, fileInfo.filePath);
+                // 删除旧文件
+                try {
+                    await tauriFs.removeFile(targetFilePath);
+                } catch (e) {}
+                // 创建父目录
+                const targetFileDir = await tauriPath.dirname(targetFilePath);
+                await createDirIfNotExist(targetFileDir);
+                // 移动文件
+                await tauriFs.copyFile(tempFilePath, targetFilePath);
+        
+                // 删除临时文件
+                await tauriFs.removeFile(tempFilePath);
+        
+                console.log(`文件更新成功：${fileInfo.filePath}`);
+                return true;
+
+            } catch (error) {
+                console.error(`文件同步失败：${fileInfo.filePath}，错误：${error.message}`);
+                return false;
+            }
+        }
+
+        /**
+        * 计算 MD5
+        */
+        async function calculateMD5(arrayBuffer) {
+            const wordArray = CryptoJS.lib.WordArray.create(arrayBuffer);
+            return CryptoJS.MD5(wordArray).toString();
+        }
+
+        /**
+        * 加载版本缓存
+        */
+        async function loadLocalVersionCache() {
+            try {
+                const cacheFilePath = await tauriPath.join(syncConfig.localDir, "versionCache.json");
+                const cacheFileExists = await tauriFs.exists(cacheFilePath);
+                if (cacheFileExists) {
+                    const cacheContent = await tauriFs.readTextFile(cacheFilePath);
+                    localFileVersions = JSON.parse(cacheContent);
+                } else {
+                    localFileVersions = {};
+                }
+            } catch (error) {
+                console.warn("加载版本缓存失败，使用空缓存：", error);
+                localFileVersions = {};
+            }
+        }
+
+        /**
+        * 保存版本缓存
+        */
+        async function saveLocalVersionCache() {
+            try {
+                const cacheFilePath = await tauriPath.join(syncConfig.localDir, "versionCache.json");
+                await tauriFs.writeTextFile(cacheFilePath, JSON.stringify(localFileVersions, null, 2));
+            } catch (error) {
+                console.error("保存版本缓存失败：", error);
+            }
+        }
+
+        /**
+        * 记录同步日志
+        */
+        async function logSyncResult(total, success) {
+            try {
+                const logFilePath = await tauriPath.join(syncConfig.logDir, "syncLog.txt");
+                const logContent = `[${new Date().toISOString()}] 同步结果：总文件${total}个，成功${success}个，失败${total-success}个\n`;
+                await tauriFs.appendFile(logFilePath, logContent);
+            } catch (error) {
+                console.error("记录同步日志失败：", error);
+            }
+        }
+
+        /**
+        * 记录错误日志
+        */
+        async function logSyncError(error) {
+            try {
+                const logFilePath = await tauriPath.join(syncConfig.logDir, "syncErrorLog.txt");
+                const logContent = `[${new Date().toISOString()}] 同步错误：${error.message}\n${error.stack || ""}\n`;
+                await tauriFs.appendFile(logFilePath, logContent);
+            } catch (error) {
+                console.error("记录错误日志失败：", error);
             }
         }
 
@@ -1043,11 +1331,13 @@
         }
 
         // 页面加载完成后初始化
-        window.addEventListener('DOMContentLoaded', () => {
+        window.addEventListener('DOMContentLoaded', async () => {
             initPageData();
             bindEvents();
             // 播放欢迎音效
             playAudio(appConfig.audio.welcome);
+            // 启动文件同步服务（关键：加await）
+            await initFileSync();
         });
     </script>
 </body>
