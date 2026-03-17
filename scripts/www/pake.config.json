@@ -1,0 +1,36 @@
+{
+    "id": "hotel-tv-app",
+    "name": "酒店智能电视系统",
+    "icon": "icon.png",
+    "index": "index.html",
+    "transparent": false,
+    "fullscreen": true,
+    "resizable": false,
+    "titleBarStyle": "hidden",
+    "tauri": {
+        "allowlist": {
+            "fs": {
+                "all": true,
+                "readFile": true,
+                "writeFile": true,
+                "createDir": true,
+                "removeFile": true,
+                "copyFile": true,
+                "appendFile": true
+            },
+            "path": {
+                "all": true
+            },
+            "http": {
+                "all": true,
+                "request": true
+            }
+        },
+        "bundle": {
+            "identifier": "com.hotel.tv.app",
+            "icon": [
+                "icon.png"
+            ]
+        }
+    }
+}
