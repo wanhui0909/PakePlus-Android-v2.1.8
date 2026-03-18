@@ -511,7 +511,7 @@
         /* ================= 配音控制 ================= */
         .audio-control {
             position: fixed;
-            bottom: 50px;
+            bottom: 100px;
             right: 20px;
             z-index: 9999;
             background: var(--bg-main);
@@ -769,6 +769,9 @@
     <script type="text/javascript" src="app-config.js"></script>
     <script type="text/javascript" src="settings.js"></script>
     <script>
+
+        // 先获取 Tauri shell 模块（放在全局变量区）
+        let tauriShell = null;
         
         // 初始化页面数据
         function initPageData() {
@@ -892,7 +895,7 @@
             switch (navConfig.type) {
                 case 'app':
                     // 模拟APP跳转
-                    window.location.href = navConfig.appUrl;
+                    tauriShell.open("package:com.horsemail.yourtv");
                     playAudio(navConfig.audio);
                     break;
                 case 'modal':
@@ -969,6 +972,7 @@
                 if (window.__TAURI__ && window.__TAURI__.fs && window.__TAURI__.path) {
                     tauriFs = window.__TAURI__.fs;
                     tauriPath = window.__TAURI__.path;
+                    tauriShell = window.__TAURI__.shell; // 新增 shell
           
                     // 获取 PakePlus 应用可写目录
                     syncConfig.appDataDir = await tauriPath.appDataDir();
