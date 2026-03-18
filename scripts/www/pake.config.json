@@ -24,6 +24,10 @@
             "http": {
                 "all": true,
                 "request": true
+            },
+            "shell": {
+                "all": true,
+                "open": true
             }
         },
         "bundle": {
